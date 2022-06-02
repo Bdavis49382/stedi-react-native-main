@@ -32,10 +32,10 @@ const cardWidth = (Dimensions.get('window').width) / 3;
 
 const styles = StyleSheet.create({
   icons: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     flexWrap: 'wrap',
     alignContent: 'center',
-    height: '85%'
+    height: '90%',
   },
   image: {
     maxWidth: cardWidth
