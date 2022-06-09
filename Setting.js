@@ -9,7 +9,7 @@ function Setting() {
       <View>
       <Button
       title="Log In"
-      onPress={() => Alert.alert('Simple Button pressed')}
+      onPress={() => Alert.alert('Enter your username here you fool')}
     />
       </View>
     )
