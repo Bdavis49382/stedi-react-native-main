@@ -2,16 +2,33 @@ import {useState} from "react";
 import { SafeAreaView, StyleSheet, TextInput } from "react-native";
 import { Button } from "react-native";
 
-const sendText = async (phoneNumber) => {
+const SendText = async (phoneNumber) => {
   console.log(phoneNumber);
-  await fetch('https://dev.stedi.me/twofactorlogin/'+phoneNumber,{
+  const loginResponse = await fetch('https://dev.stedi.me/twofactorlogin/'+phoneNumber,{
     method: 'Post',
     headers: {
       'Content-Type': 'application/text'
     }
   });
-
+  const loginResponseText = await loginResponse.text();
+  console.log(loginResponseText);
   
+}
+const getToken = async({phoneNumber,otp}) => {
+
+  const loginResponse = await fetch('https://dev.stedi.me/twofactorlogin/',{
+    method: 'Post',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body:{
+      phoneNumber,
+      oneTimePassword:otp
+    }
+
+  });
+  const token = await loginResponse.text();
+  console.log(token)
 }
 const Login = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -27,7 +44,7 @@ const Login = () => {
       />
       <Button
         title="Heck yeah that's my phone number!"
-        onPress={() => sendText(phoneNumber)}
+        onPress={() => SendText(phoneNumber)}
       />
       <TextInput
         style={styles.input}
@@ -40,7 +57,7 @@ const Login = () => {
       />
       <Button
         title="Login"
-        
+        onPress={() => getToken({phoneNumber,oneTimePassword})}
       />
     </SafeAreaView>
   );

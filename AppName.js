@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     paddingLeft:20,
   },
   text: {
-    color: 'white',
+    color: "white",
     fontWeight: '600',
     fontSize: 30
   }
