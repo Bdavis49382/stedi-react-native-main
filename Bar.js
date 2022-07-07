@@ -1,12 +1,15 @@
 import React from "react";
 import { StyleSheet, Text, View, Image } from 'react-native';
+import { clickProps } from "react-native-web/dist/cjs/modules/forwardedProps";
 import AppName from "./AppName";
 import Setting from "./Setting";
+import Token from "./Token";
 
 function Bar() {
     return(
         <View style={styles.bar}>
             <AppName />
+            <Token userName = {clickProps.userName}/>
             <Setting />  
         </View>
     )

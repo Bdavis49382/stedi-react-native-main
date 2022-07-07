@@ -1,6 +1,5 @@
 import {useState} from "react";
-import { SafeAreaView, StyleSheet, TextInput } from "react-native";
-import { Button } from "react-native";
+import { SafeAreaView, StyleSheet, TouchableOpacity, TextInput , Text, Image, View} from "react-native";
 
 const SendText = async (phoneNumber) => {
   console.log(phoneNumber);
@@ -14,7 +13,7 @@ const SendText = async (phoneNumber) => {
   console.log(loginResponseText);
   
 }
-const getToken = async({phoneNumber,oneTimePassword,setUserLoggedIn}) => {
+const getTokenAndUserName = async ({phoneNumber,oneTimePassword,setUserLoggedIn,setToken,setUserName}) => {
 
   console.log(phoneNumber,oneTimePassword);
   const loginResponse = await fetch('https://dev.stedi.me/twofactorlogin',{
@@ -24,7 +23,8 @@ const getToken = async({phoneNumber,oneTimePassword,setUserLoggedIn}) => {
     },
     body: JSON.stringify({
       phoneNumber,
-      oneTimePassword:oneTimePassword
+      oneTimePassword,
+      setToken
     })
 
   });
@@ -34,10 +34,14 @@ const getToken = async({phoneNumber,oneTimePassword,setUserLoggedIn}) => {
     setUserLoggedIn(true);
   }
   const tokenResponseString = await loginResponse.text();
+  const userNameResponse = await fetch("https://dev.stedi.me/validate/"+token, {method: 'GET'});
+  const userName = await userNameResponse.text();
+  setToken(tokenResponseString);
+  setUserName(userName);
 }
 const Login = (props) => {
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [oneTimePassword, setOTP] = useState(null);
+  const [oneTimePassword, setOneTimePassword] = useState(null);
 
   return (
     <SafeAreaView style = {styles.mainView}>
@@ -47,23 +51,25 @@ const Login = (props) => {
         value={phoneNumber}
         placeholder="555-555-5555"
       />
-      <Button
-        title="Heck yeah that's my phone number!"
-        onPress={() => SendText(phoneNumber)}
-      />
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => SendText(phoneNumber)}>
+        <Text style= {styles.text}>Send Text</Text>
+      </TouchableOpacity>
       <TextInput
         style={styles.input}
-        onChangeText={setOTP}
+        onChangeText={setOneTimePassword}
         value={oneTimePassword}
         placeholder="1234"
         keyboardType="numeric"
         secureTextEntry={true}
         maxLength={4}
       />
-      <Button
-        title="Login"
-        onPress={() => getToken({phoneNumber,oneTimePassword,setUserLoggedIn:props.setUserLoggedIn})}
-      />
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => getTokenAndUserName({phoneNumber,oneTimePassword,setUserLoggedIn:props.setUserLoggedIn, setToken:props.setToken, setUserName:props.setUserName})}>
+        <Text style={styles.text}>Login</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
@@ -78,6 +84,13 @@ const styles = StyleSheet.create({
   mainView: {
     marginTop: 200
   },
+  button: {
+    alignItems: "center",
+    backgroundColor: "#009707",
+    padding: 10,
+    height: 40,
+    alignSelf: "center"
+  }
 });
 
 export default Login;
