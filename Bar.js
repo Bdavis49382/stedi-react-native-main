@@ -8,7 +8,7 @@ import Token from "./Token";
 function Bar(props) {
     return(
         <View style={styles.bar}>
-            <AppName />
+            {/* <AppName /> */}
             <Token userName = {props.userName}/>
             <Setting />  
         </View>
