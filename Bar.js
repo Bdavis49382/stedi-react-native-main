@@ -5,11 +5,11 @@ import AppName from "./AppName";
 import Setting from "./Setting";
 import Token from "./Token";
 
-function Bar() {
+function Bar(props) {
     return(
         <View style={styles.bar}>
             <AppName />
-            <Token userName = {clickProps.userName}/>
+            <Token userName = {props.userName}/>
             <Setting />  
         </View>
     )
